@@ -1,42 +1,47 @@
-import styled from 'styled-components'
-import {Table} from "antd";
+import React, { useEffect, useState } from "react";
+import { criticalError } from "./Helpers/helpers";
+
+import { getAll as getAllAction } from "./Store/Actions/managers.actions";
+
+import styled from "styled-components";
+import { Table } from "antd";
 
 const App = () => {
-  const dataSource = [
-    {
-      key: '1',
-      name: 'Mike',
-      age: 32,
-      address: '10 Downing Street',
-    },
-    {
-      key: '2',
-      name: 'John',
-      age: 42,
-      address: '10 Downing Street',
-    },
-  ];
-  
+  //* ==> State <== *//
+  const [data, setData] = useState([]);
+
+  const getAll = async () => {
+    const result = await getAllAction();
+    const { ok, data } = result;
+    if (ok) {
+      setData(data);
+    } else criticalError("Error getting managers");
+  };
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "nombre",
+      key: "nombre",
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: "Developer",
+      dataIndex: "desarrollador",
+      key: "desarrollador",
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: "Year of release",
+      dataIndex: "lanzamiento",
+      key: "lanzamiento",
     },
   ];
 
@@ -45,11 +50,10 @@ const App = () => {
       <div className="containerTitule">
         <span className="titule">Maintenance of managers</span>
       </div>
-
-    <Table dataSource={dataSource} columns={columns} />;
+      <Table dataSource={data} columns={columns} />;
     </Wrapper>
-  )
-}
+  );
+};
 
 const Wrapper = styled.div`
   width: 100%;

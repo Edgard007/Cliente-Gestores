@@ -7,8 +7,8 @@ const getAll = async () => {
     const result: any = await requestApi(getAllPath, "GET", {}, {});
     return result;
   } catch (e: any) {
-    console.error("||* ==> Error loginWithEmailAndPass <== *||", e);
-    criticalError("Error al iniciar sesión");
+    console.error("||* ==> Error getAll-Action <== *||", e);
+    criticalError("Error getting managers");
   }
 };
 

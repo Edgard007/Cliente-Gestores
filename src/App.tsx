@@ -11,7 +11,7 @@ const App = () => {
   const [data, setData] = useState([]);
 
   const getAll = async () => {
-    const result = await getAllAction();
+    const result: any = await getAllAction();
     const { ok, data } = result;
     if (ok) {
       setData(data);
@@ -22,7 +22,7 @@ const App = () => {
     getAll();
   }, []);
 
-  const columns = [
+  const columns: Object[] = [
     {
       title: "ID",
       dataIndex: "id",

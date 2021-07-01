@@ -18,7 +18,7 @@ const requestApi = (
       .then((response) => {
         const status = response.status;
         response.json().then((json) => {
-          resolve({ ok: status == 200, data: json, status: status });
+          resolve({ ok: status === 200, data: json, status: status });
         });
       })
       .catch((e) => {

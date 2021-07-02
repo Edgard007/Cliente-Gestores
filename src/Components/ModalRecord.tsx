@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Modal, Input, InputNumber } from "antd";
 import { UserOutlined, PicCenterOutlined } from "@ant-design/icons";
@@ -8,19 +8,43 @@ const ModalRecord = ({
   loading = false,
   showModal = false,
   titule = "",
-  onClickOk = Function,
-  onCancel = Function,
+  onClickOk = (record: any) => {},
+  onCancel = () => {},
 }) => {
   //* ==> State <== *//
   const [name, setName] = useState("");
   const [developer, setDeveloper] = useState("");
-  const [year, setYear] = useState(Number);
+  const [year, setYear] = useState(0);
+
+  const [error, setError] = useState(false);
+
+  const initialState = () => {
+    setName("");
+    setDeveloper("");
+    setYear(0);
+    setError(false);
+  };
+
+  useEffect(() => {
+    initialState();
+  }, [showModal]);
+
+  const validForm = () => {
+    if (name && developer && year) {
+      setError(false);
+      onClickOk({
+        nombre: name,
+        lanzamiento: year,
+        desarrollador: developer,
+      });
+    } else setError(true);
+  };
 
   return (
     <Modal
       title={titule === "add" ? "Save new record" : "Edit existing record"}
       visible={showModal}
-      onOk={() => onClickOk()}
+      onOk={validForm}
       confirmLoading={loading}
       onCancel={() => onCancel()}
     >
@@ -53,6 +77,11 @@ const ModalRecord = ({
             value={year}
           />
         </div>
+        {error && (
+          <div className="inputText labelError">
+            Fill out the following form
+          </div>
+        )}
       </Wrapper>
     </Modal>
   );
@@ -61,6 +90,11 @@ const ModalRecord = ({
 const Wrapper = styled.div`
   .inputText {
     margin-top: 20px;
+  }
+
+  .labelError {
+    text-align: center;
+    color: red;
   }
 `;
 

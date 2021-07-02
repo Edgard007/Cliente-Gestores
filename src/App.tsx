@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { criticalError } from "./Helpers/helpers";
 
 import { getAll as getAllAction } from "./Store/Actions/managers.actions";
@@ -11,10 +11,16 @@ import {
   DeleteTwoTone,
 } from "@ant-design/icons";
 
+//* ==> Components <== *//
+import ModalRecord from "./Components/ModalRecord";
+
 const App = () => {
   //* ==> State <== *//
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [action, setAction] = useState("add");
 
   const getAll = async () => {
     try {
@@ -36,7 +42,13 @@ const App = () => {
     getAll();
   }, []);
 
+  const addRecord = () => {
+    setAction("add");
+    setShowModal(true);
+  };
+
   const changeRecord = async (record: any) => {
+    setAction("edit");
     console.log("record", record);
   };
 
@@ -99,11 +111,13 @@ const App = () => {
       <div className="containerTable">
         <div className="headerTable">
           <Tooltip title="Add new record">
-            <PlusCircleTwoTone className="iconAdd" />
+            <PlusCircleTwoTone className="iconAdd" onClick={addRecord} />
           </Tooltip>
         </div>
         <Table dataSource={data} columns={columns} loading={loading} />
       </div>
+
+      <ModalRecord titule={action} showModal={showModal} loading={loading} />
     </Wrapper>
   );
 };

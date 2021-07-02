@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { criticalError } from "./Helpers/helpers";
-
-import { getAll as getAllAction } from "./Store/Actions/managers.actions";
 
 import styled from "styled-components";
 import { Table, Tooltip } from "antd";
@@ -10,6 +7,15 @@ import {
   EditTwoTone,
   DeleteTwoTone,
 } from "@ant-design/icons";
+
+//* ==> Helpers <== *//
+import { criticalError, confirmAlert, alertSucces } from "./Helpers/helpers";
+
+//* ==> Actions <== *//
+import {
+  getAll as getAllAction,
+  deleteRecord as deleteRecordAction,
+} from "./Store/Actions/managers.actions";
 
 //* ==> Components <== *//
 import ModalRecord from "./Components/ModalRecord";
@@ -38,6 +44,22 @@ const App = () => {
     }
   };
 
+  const deleteFetch = async (record: any) => {
+    try {
+      setLoading(true); // Show Loading
+      const result: any = await deleteRecordAction(record?.id);
+      const { ok } = result;
+      if (ok) {
+        alertSucces("Record successfully removed!");
+        await getAll();
+      } else criticalError("Error deleting record");
+      setLoading(false); // Hide Loading
+    } catch (e) {
+      console.error("||* ==> Error deleteRecord <== *||", e);
+      criticalError("Error deleting record");
+    }
+  };
+
   useEffect(() => {
     getAll();
   }, []);
@@ -53,7 +75,7 @@ const App = () => {
   };
 
   const deleteRecord = async (record: any) => {
-    console.log("record", record);
+    confirmAlert("", "", deleteFetch, record);
   };
 
   const columns: Object[] = [

@@ -17,9 +17,17 @@ const requestApi = (
     })
       .then((response) => {
         const status = response.status;
-        response.json().then((json) => {
-          resolve({ ok: status === 200, data: json, status: status });
-        });
+        const okResult: boolean =
+          status === 200 || status === 201 || status === 204 || false;
+
+        response
+          .json()
+          .then((json) => {
+            resolve({ ok: okResult, data: json, status: status });
+          })
+          .catch(() => {
+            resolve({ ok: okResult, data: [], status: status });
+          });
       })
       .catch((e) => {
         console.error("||* ==> Error requestApi <== *||", e);

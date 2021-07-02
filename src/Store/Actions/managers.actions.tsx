@@ -2,6 +2,9 @@ import { criticalError } from "../../Helpers/helpers";
 import { requestApi } from "../../Config/useDataApi";
 import { getAll as getAllPath, recordById } from "../../Config/path";
 
+//* ==> Interfaces <== *//
+import { IManagers } from "../../Models/managers.model";
+
 /**
  * Get all records
  * @returns
@@ -18,10 +21,10 @@ const getAll = async () => {
 
 /**
  * Save new record
- * @param body <Object> Data to save
+ * @param body <IManagers> Data to save
  * @returns
  */
-const addRecord = async (body: Object) => {
+const addRecord = async (body: IManagers) => {
   try {
     const result: any = await requestApi(getAllPath, "POST", body, {});
     return result;
@@ -33,11 +36,11 @@ const addRecord = async (body: Object) => {
 
 /**
  * Edit existing record
- * @param body <Object> Data to modify
+ * @param body <IManagers> Data to modify
  * @param idRecord <Number> Resgit ID
  * @returns
  */
-const editRecord = async (body: Object, idRecord: Number) => {
+const editRecord = async (body: IManagers, idRecord: Number) => {
   try {
     const result: any = await requestApi(recordById(idRecord), "PUT", body, {});
     return result;

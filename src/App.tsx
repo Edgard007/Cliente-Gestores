@@ -22,8 +22,8 @@ import {
 //* ==> Components <== *//
 import ModalRecord from "./Components/ModalRecord";
 
-//* ==> Model <== *//
-//import { Managers } from "./Models/managers.model";
+//* ==> Interfaces <== *//
+import { IManagers } from "./Models/managers.model";
 
 const App = () => {
   //* ==> State <== *//
@@ -73,7 +73,7 @@ const App = () => {
    * Function to execute the "Action" service to save a new record.
    * @param body <Object> Data to save
    */
-  const addFecth = async (body: Object, id: Number = 0) => {
+  const addFecth = async (body: IManagers, id: Number = 0) => {
     try {
       hideModal(); // Hide Modal
       setLoading(true); // Show Loading
@@ -96,7 +96,7 @@ const App = () => {
    * @param body <Object> Data to save
    * @param id <Number> Record ID
    */
-  const editFecth = async (body: Object, id: Number = 0) => {
+  const editFecth = async (body: IManagers, id: Number = 0) => {
     try {
       hideModal(); // Hide Modal
       setLoading(true); // Show Loading

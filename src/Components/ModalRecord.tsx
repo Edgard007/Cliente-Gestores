@@ -4,12 +4,15 @@ import { Modal, Input, InputNumber } from "antd";
 import { UserOutlined, PicCenterOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
+//* ==> Interfaces <== *//
+import { IManagers } from "../Models/managers.model";
+
 const ModalRecord = ({
   loading = false,
   showModal = false,
   titule = "",
   selectedRecord = { id: 0, nombre: "", desarrollador: "", lanzamiento: 0 },
-  onClickOk = (record: any, id: Number = 0) => {},
+  onClickOk = (record: IManagers, id: Number = 0) => {},
   onCancel = () => {},
 }) => {
   //* ==> State <== *//

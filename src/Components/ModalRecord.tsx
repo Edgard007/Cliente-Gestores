@@ -8,10 +8,12 @@ const ModalRecord = ({
   loading = false,
   showModal = false,
   titule = "",
-  onClickOk = (record: any) => {},
+  selectedRecord = { id: 0, nombre: "", desarrollador: "", lanzamiento: 0 },
+  onClickOk = (record: any, id: Number = 0) => {},
   onCancel = () => {},
 }) => {
   //* ==> State <== *//
+  const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [developer, setDeveloper] = useState("");
   const [year, setYear] = useState(0);
@@ -19,6 +21,7 @@ const ModalRecord = ({
   const [error, setError] = useState(false);
 
   const initialState = () => {
+    setId(0);
     setName("");
     setDeveloper("");
     setYear(0);
@@ -29,17 +32,27 @@ const ModalRecord = ({
     initialState();
   }, [showModal]);
 
+  useEffect(() => {
+    setId(selectedRecord?.id || 0);
+    setName(selectedRecord?.nombre || "");
+    setDeveloper(selectedRecord?.desarrollador || "");
+    setYear(selectedRecord?.lanzamiento || 0);
+  }, [selectedRecord, showModal]);
+
   /**
    * Validate if you have completed the form
    */
   const validForm = () => {
     if (name && developer && year) {
       setError(false);
-      onClickOk({
-        nombre: name,
-        lanzamiento: year,
-        desarrollador: developer,
-      });
+      onClickOk(
+        {
+          nombre: name,
+          lanzamiento: year,
+          desarrollador: developer,
+        },
+        id
+      );
     } else setError(true);
   };
 

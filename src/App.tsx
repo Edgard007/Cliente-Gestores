@@ -15,11 +15,15 @@ import { criticalError, confirmAlert, alertSucces } from "./Helpers/helpers";
 import {
   getAll as getAllAction,
   addRecord as addRecordAction,
+  editRecord as editRecordAction,
   deleteRecord as deleteRecordAction,
 } from "./Store/Actions/managers.actions";
 
 //* ==> Components <== *//
 import ModalRecord from "./Components/ModalRecord";
+
+//* ==> Model <== *//
+//import { Managers } from "./Models/managers.model";
 
 const App = () => {
   //* ==> State <== *//
@@ -28,6 +32,23 @@ const App = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [action, setAction] = useState("add");
+  const [selectedRecord, setSelectedRecord] = useState({
+    id: 0,
+    nombre: "",
+    desarrollador: "",
+    lanzamiento: 0,
+  });
+
+  const hideModal = () => {
+    setShowModal(false); // Hide Modal
+    setAction("add");
+    setSelectedRecord({
+      id: 0,
+      nombre: "",
+      desarrollador: "",
+      lanzamiento: 0,
+    });
+  };
 
   /**
    * Function to execute the "Action" service and obtain all the records.
@@ -52,9 +73,9 @@ const App = () => {
    * Function to execute the "Action" service to save a new record.
    * @param body <Object> Data to save
    */
-  const add = async (body: Object) => {
+  const addFecth = async (body: Object, id: Number = 0) => {
     try {
-      setShowModal(false); // Hide Modal
+      hideModal(); // Hide Modal
       setLoading(true); // Show Loading
       const result: any = await addRecordAction(body);
       const { ok } = result;
@@ -66,6 +87,29 @@ const App = () => {
     } catch (e) {
       console.error("||* ==> Error addRecord <== *||", e);
       criticalError("Error when saving record");
+      setLoading(false); // Hide Loading
+    }
+  };
+
+  /**
+   * Function for executing the "Action" service to modify an existing record.
+   * @param body <Object> Data to save
+   * @param id <Number> Record ID
+   */
+  const editFecth = async (body: Object, id: Number = 0) => {
+    try {
+      hideModal(); // Hide Modal
+      setLoading(true); // Show Loading
+      const result: any = await editRecordAction({ ...body, id: id }, id);
+      const { ok } = result;
+      if (ok) {
+        alertSucces("Successfully modified record!");
+        await getAll();
+      } else criticalError("Error when modifying record");
+      setLoading(false); // Hide Loading
+    } catch (e) {
+      console.error("||* ==> Error editRecord <== *||", e);
+      criticalError("Error when modifying record");
       setLoading(false); // Hide Loading
     }
   };
@@ -107,8 +151,9 @@ const App = () => {
    * @param record
    */
   const changeRecord = async (record: any) => {
+    setSelectedRecord(record);
     setAction("edit");
-    console.log("record", record);
+    setShowModal(true); // Show Modal
   };
 
   /**
@@ -189,8 +234,9 @@ const App = () => {
         titule={action}
         showModal={showModal}
         loading={loading}
-        onClickOk={add}
-        onCancel={() => setShowModal(false)}
+        onClickOk={action === "add" ? addFecth : editFecth}
+        selectedRecord={selectedRecord}
+        onCancel={() => hideModal()}
       />
     </Wrapper>
   );

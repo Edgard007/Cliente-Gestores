@@ -14,6 +14,7 @@ import { criticalError, confirmAlert, alertSucces } from "./Helpers/helpers";
 //* ==> Actions <== *//
 import {
   getAll as getAllAction,
+  addRecord as addRecordAction,
   deleteRecord as deleteRecordAction,
 } from "./Store/Actions/managers.actions";
 
@@ -44,6 +45,24 @@ const App = () => {
     }
   };
 
+  const add = async (body: any) => {
+    try {
+      setShowModal(false); // Hide Modal
+      setLoading(true); // Show Loading
+      const result: any = await addRecordAction(body);
+      const { ok } = result;
+      if (ok) {
+        alertSucces("Record successfully saved!");
+        await getAll();
+      } else criticalError("Error when saving record");
+      setLoading(false); // Hide Loading
+    } catch (e) {
+      console.error("||* ==> Error addRecord <== *||", e);
+      criticalError("Error when saving record");
+      setLoading(false); // Hide Loading
+    }
+  };
+
   const deleteFetch = async (record: any) => {
     try {
       setLoading(true); // Show Loading
@@ -66,7 +85,7 @@ const App = () => {
 
   const addRecord = () => {
     setAction("add");
-    setShowModal(true);
+    setShowModal(true); // Show Modal
   };
 
   const changeRecord = async (record: any) => {
@@ -144,7 +163,13 @@ const App = () => {
         />
       </div>
 
-      <ModalRecord titule={action} showModal={showModal} loading={loading} />
+      <ModalRecord
+        titule={action}
+        showModal={showModal}
+        loading={loading}
+        onClickOk={add}
+        onCancel={() => setShowModal(false)}
+      />
     </Wrapper>
   );
 };

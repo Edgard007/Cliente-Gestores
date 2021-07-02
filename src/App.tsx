@@ -29,6 +29,9 @@ const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [action, setAction] = useState("add");
 
+  /**
+   * Function to execute the "Action" service and obtain all the records.
+   */
   const getAll = async () => {
     try {
       setLoading(true); // Show Loading
@@ -45,7 +48,11 @@ const App = () => {
     }
   };
 
-  const add = async (body: any) => {
+  /**
+   * Function to execute the "Action" service to save a new record.
+   * @param body <Object> Data to save
+   */
+  const add = async (body: Object) => {
     try {
       setShowModal(false); // Hide Modal
       setLoading(true); // Show Loading
@@ -63,6 +70,10 @@ const App = () => {
     }
   };
 
+  /**
+   * Function to execute the "Action" service to modify an existing record.
+   * @param record <Object> Data to modify
+   */
   const deleteFetch = async (record: any) => {
     try {
       setLoading(true); // Show Loading
@@ -83,16 +94,27 @@ const App = () => {
     getAll();
   }, []);
 
+  /**
+   * Function executing Save icon
+   */
   const addRecord = () => {
     setAction("add");
     setShowModal(true); // Show Modal
   };
 
+  /**
+   * Function executing Modify icon
+   * @param record
+   */
   const changeRecord = async (record: any) => {
     setAction("edit");
     console.log("record", record);
   };
 
+  /**
+   * Function that executes Delete icon
+   * @param record Selected record
+   */
   const deleteRecord = async (record: any) => {
     confirmAlert("", "", deleteFetch, record);
   };

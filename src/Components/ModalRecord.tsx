@@ -29,6 +29,9 @@ const ModalRecord = ({
     initialState();
   }, [showModal]);
 
+  /**
+   * Validate if you have completed the form
+   */
   const validForm = () => {
     if (name && developer && year) {
       setError(false);

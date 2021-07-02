@@ -136,7 +136,12 @@ const App = () => {
             <PlusCircleTwoTone className="iconAdd" onClick={addRecord} />
           </Tooltip>
         </div>
-        <Table dataSource={data} columns={columns} loading={loading} />
+        <Table
+          dataSource={data}
+          columns={columns}
+          loading={loading}
+          rowKey={(record: any) => record?.id}
+        />
       </div>
 
       <ModalRecord titule={action} showModal={showModal} loading={loading} />
